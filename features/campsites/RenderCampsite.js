@@ -38,7 +38,6 @@ const RenderCampsite = (props) => {
     }
     return <View />;
 };
-
 const styles = StyleSheet.create({
     cardContainer: {
         padding: 0,
