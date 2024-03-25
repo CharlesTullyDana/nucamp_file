@@ -21,16 +21,12 @@ import { fetchCampsites } from '../features/campsites/campsitesSlice';
 import { fetchPromotions } from '../features/promotions/promotionsSlice';
 import { fetchComments } from '../features/comments/commentsSlice';
 
-
 const Drawer = createDrawerNavigator();
-
 
 const screenOptions = {
     headerTintColor: '#fff',
     headerStyle: { backgroundColor: '#5637DD' }
-
 };
-
 
 const HomeNavigator = () => {
     const Stack = createStackNavigator();
@@ -39,7 +35,6 @@ const HomeNavigator = () => {
             <Stack.Screen
                 name='Home'
                 component={HomeScreen}
-
                 options={({ navigation }) => ({
                     title: 'Home',
                     headerLeft: () => (
@@ -51,13 +46,11 @@ const HomeNavigator = () => {
                         />
                     )
                 })}
-
             />
         </Stack.Navigator>
     );
 };
 
-////////// NOTE: You are missing stack navigators ofr the About, Contact, and Reservation screens
 const AboutNavigator = () => {
     const Stack = createStackNavigator();
     return (
@@ -103,9 +96,6 @@ const ContactNavigator = () => {
     );
 };
 
-
-
-
 const ReservationNavigator = () => {
     const Stack = createStackNavigator();
     return (
@@ -128,31 +118,17 @@ const ReservationNavigator = () => {
         </Stack.Navigator>
     );
 };
-////////// END NOTE
 
 const DirectoryNavigator = () => {
     const Stack = createStackNavigator();
     return (
         <Stack.Navigator
             initialRouteName='Directory'
-////////// NOTE: We are now using our "screenOptions" variable to avoid rewriting the same CSS rules every time.
-// OLD CODE:
-/*
-            screenOptions={{
-                headerStyle: {
-                    backgroundColor: '#5637DD'
-                },
-                headerTintColor: '#fff'
-            }}
-*/
             screenOptions={screenOptions}
-////////// END NOTE
         >
             <Stack.Screen
                 name='Directory'
                 component={DirectoryScreen}
-////////// NOTE: Like Home above, we have changed the way this menu item looks.
-// OLD CODE:                options={{ title: 'Campsite Directory' }}
                 options={({ navigation }) => ({
                     title: 'Campsite Directory',
                     headerLeft: () => (
@@ -164,7 +140,6 @@ const DirectoryNavigator = () => {
                         />
                     )
                 })}
-////////// END NOTE
             />
             <Stack.Screen
                 name='CampsiteInfo'
@@ -177,7 +152,6 @@ const DirectoryNavigator = () => {
     );
 };
 
-////////// NOTE: By the end of the week, we had added this to give a custom look to our drawer menu.
 const CustomDrawerContent = (props) => (
     <DrawerContentScrollView {...props}>
         <View style={styles.drawerHeader}>
@@ -191,7 +165,6 @@ const CustomDrawerContent = (props) => (
         <DrawerItemList {...props} labelStyle={{ fontWeight: 'bold' }} />
     </DrawerContentScrollView>
 );
-////////// END NOTE
 
 const Main = () => {
     const dispatch = useDispatch();
@@ -213,16 +186,12 @@ const Main = () => {
         >
             <Drawer.Navigator
                 initialRouteName='Home'
-////////// NOTE: We need to reference our new custom drawer content method
                 drawerContent={CustomDrawerContent}
-////////// END NOTE
                 drawerStyle={{ backgroundColor: '#CEC8FF' }}
             >
                 <Drawer.Screen
                     name='Home'
                     component={HomeNavigator}
-////////// NOTE: We have changed the way the drawer item looks.
-// OLD CODE:                    options={{ title: 'Home' }}
                     options={{
                         title: 'Home',
                         drawerIcon: ({ color }) => (
@@ -235,13 +204,10 @@ const Main = () => {
                             />
                         )
                     }}
-////////// END NOTE
                 />
                 <Drawer.Screen
                     name='Directory'
                     component={DirectoryNavigator}
-////////// NOTE: We have changed the way the drawer item looks.
-// OLD CODE:                    options={{ title: 'Directory' }}
                     options={{
                         title: 'Campsite Directory',
                         drawerIcon: ({ color }) => (
@@ -254,12 +220,8 @@ const Main = () => {
                             />
                         )
                     }}
-////////// END NOTE
                 />
-{
-////////// NOTE: You are missing drawer items for the other screens.
-}
-<Drawer.Screen
+                <Drawer.Screen
                     name='ReserveCampsite'
                     component={ReservationNavigator}
                     options={{
@@ -307,15 +269,11 @@ const Main = () => {
                         )
                     }}
                 />
-{
-////////// END NOTE
-}
             </Drawer.Navigator>
         </View>
     );
 };
 
-////////// NOTE: We now have a custom stylesheet variable with some CSS rules.
 const styles = StyleSheet.create({
     drawerHeader: {
         backgroundColor: '#5637DD',
@@ -341,6 +299,5 @@ const styles = StyleSheet.create({
         fontSize: 24
     }
 });
-////////// END NOTE
 
 export default Main;
