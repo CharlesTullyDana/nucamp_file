@@ -1,68 +1,98 @@
-import { FlatList, StyleSheet, Text, View } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useState } from 'react';
+import { View, Text, Button, Modal } from 'react-native';
+import { Icon, Rating, Input } from 'react-native-elements';
 import RenderCampsite from '../features/campsites/RenderCampsite';
-import { toggleFavorite } from '../features/favorites/favoritesSlice';
+const CampsiteInfoScreen = (props) => {
+  const [showModal, setShowModal] = useState(false);
+  const [rating, setRating] = useState(5);
+  const [author, setAuthor] = useState('');
+  const [text, setText] = useState('');
 
-const CampsiteInfoScreen = ({ route }) => {
-    const { campsite } = route.params;
-    const comments = useSelector((state) => state.comments);
-    const favorites = useSelector((state) => state.favorites);
-    const dispatch = useDispatch();
-
-    const renderCommentItem = ({ item }) => {
-        return (
-            <View style={styles.commentItem}>
-                <Text style={{ fontSize: 14 }}>{item.text}</Text>
-                <Text style={{ fontSize: 12 }}>{item.rating} Stars</Text>
-                <Text style={{ fontSize: 12 }}>
-                    {`-- ${item.author}, ${item.date}`}
-                </Text>
-            </View>
-        );
+  const handleSubmit = () => {
+    const newComment = {
+      author,
+      rating,
+      text,
+      campsiteId: props.campsiteId
     };
+    console.log(newComment);
+    setShowModal(!showModal);
+  };
 
-    return (
-        <FlatList
-            data={comments.commentsArray.filter(
-                (comment) => comment.campsiteId === campsite.id
-            )}
-            renderItem={renderCommentItem}
-            keyExtractor={(item) => item.id.toString()}
-            contentContainerStyle={{
-                marginHorizontal: 20,
-                paddingVertical: 20
+  const resetForm = () => {
+    setRating(5);
+    setAuthor('');
+    setText('');
+  };
+
+  return (
+    <>
+    <View>
+      <RenderCampsite
+        campsite={props.campsite}
+        onShowModal={() => setShowModal(!showModal)}
+      />
+      <View>
+      <Modal
+        animationType={'slide'}
+        transparent={false}
+        visible={showModal}
+        onRequestClose={() => setShowModal(!showModal)}
+      >
+        
+        <View style={styles.modal}>
+          <Rating
+            showRating
+            startingValue={rating}
+            imageSize={40}
+            onFinishRating={(rating) => setRating(rating)}
+            style={{ paddingVertical: 10 }}
+          />
+          <Input
+            placeholder='Author'
+            leftIcon={{ type: 'font-awesome', name: 'user-o' }}
+            leftIconContainerStyle={{ paddingRight: 10 }}
+            onChangeText={(author) => setAuthor(author)}
+            value={author}
+          />
+          <Input
+            placeholder='Comment'
+            leftIcon={{ type: 'font-awesome', name: 'comment-o' }}
+            leftIconContainerStyle={{ paddingRight: 10 }}
+            onChangeText={(text) => setText(text)}
+            value={text}
+          />
+          <View style={{ margin: 10 }}>
+            <Button
+              onPress={() => {
+                handleSubmit();
+                resetForm();
+              }}
+              title='Submit'
+              color='#5637DD'
+            />
+          </View>
+          <Button
+            onPress={() => {
+              setShowModal(!showModal);
+              resetForm();
             }}
-            ListHeaderComponent={
-                <>
-                    <RenderCampsite
-                        campsite={campsite}
-                        isFavorite={favorites.includes(campsite.id)}
-                        markFavorite={() => 
-                            dispatch(toggleFavorite(campsite.id))
-                        }
-                    />
-                    <Text style={styles.commentsTitle}>Comments</Text>
-                </>
-            }
-        />
-    );
+            title='Cancel'
+            color='#808080'
+          />
+        </View>
+      </Modal>
+   </View> 
+  </View>
+  </>
+  );
 };
 
-const styles = StyleSheet.create({
-    commentsTitle: {
-        textAlign: 'center',
-        backgroundColor: '#fff',
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: '#43484D',
-        padding: 10,
-        paddingTop: 30
-    },
-    commentItem: {
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-        backgroundColor: '#fff'
-    }
-});
+const styles = {
+  modal: {
+    justifyContent: 'center',
+    margin: 20
+  }
+};
 
-export default CampsiteInfoScreen;
+export default  CampsiteInfoScreen;

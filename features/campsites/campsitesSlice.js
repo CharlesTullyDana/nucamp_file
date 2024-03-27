@@ -21,7 +21,7 @@ const campsitesSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
-            .addCase(fetchCampsites.pending, (state) => {
+            .addCase(fetchCampsites.pending, (state ) => {
                 state.isLoading = true;
             })
             .addCase(fetchCampsites.fulfilled, (state, action) => {
