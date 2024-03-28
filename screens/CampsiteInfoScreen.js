@@ -1,12 +1,16 @@
+import { useState } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import RenderCampsite from '../features/campsites/RenderCampsite';
 import { toggleFavorite } from '../features/favorites/favoritesSlice';
+import { COMMENTS } from '../shared/comments';
 
 const CampsiteInfoScreen = ({ route }) => {
     const { campsite } = route.params;
-    const comments = useSelector((state) => state.comments);
-    const favorites = useSelector((state) => state.favorites);
+
+
+    const [comments, setComments] = useState(COMMENTS);
+    const [favorite, setFavorite] = useState(false);
     const dispatch = useDispatch();
 
     const renderCommentItem = ({ item }) => {
@@ -15,15 +19,15 @@ const CampsiteInfoScreen = ({ route }) => {
                 <Text style={{ fontSize: 14 }}>{item.text}</Text>
                 <Text style={{ fontSize: 12 }}>{item.rating} Stars</Text>
                 <Text style={{ fontSize: 12 }}>
-                    {`-- ${item.author}, ${item.date}`}
+                    {` --${item.author}, ${item.date}`}
                 </Text>
             </View>
         );
     };
-
     return (
+
         <FlatList
-            data={comments.commentsArray.filter(
+            data={comments.filter(
                 (comment) => comment.campsiteId === campsite.id
             )}
             renderItem={renderCommentItem}
@@ -35,18 +39,18 @@ const CampsiteInfoScreen = ({ route }) => {
             ListHeaderComponent={
                 <>
                     <RenderCampsite
-                        campsite={campsite}
-                        isFavorite={favorites.includes(campsite.id)}
-                        markFavorite={() => 
-                            dispatch(toggleFavorite(campsite.id))
-                        }
-                    />
+                     campsite={campsite} 
+                     isFavorite={favorite}
+                     markFavorite={() => setFavorite(true)}
+                     />
                     <Text style={styles.commentsTitle}>Comments</Text>
+
                 </>
             }
         />
     );
 };
+
 
 const styles = StyleSheet.create({
     commentsTitle: {
