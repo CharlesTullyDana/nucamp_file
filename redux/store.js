@@ -3,6 +3,9 @@ import { campsitesReducer } from '../features/campsites/campsitesSlice';
 import { commentsReducer } from '../features/comments/commentsSlice';
 import { partnersReducer } from '../features/partners/partnersSlice';
 import { promotionsReducer } from '../features/promotions/promotionsSlice';
+////////// Import your favorites reducer
+import { favoritesReducer } from '../features/favorites/favoritesSlice';
+//////////
 
 
 
@@ -11,7 +14,11 @@ export const store = configureStore({
         campsites: campsitesReducer,
         comments: commentsReducer,
         partners: partnersReducer,
-        promotions: promotionsReducer
+////////// Add yor favorites reducer
+// OLD CODE:        promotions: promotionsReducer
+        promotions: promotionsReducer,
+        favorites: favoritesReducer
+//////////
     }
 
 }); 

@@ -3,13 +3,15 @@ import { FlatList, StyleSheet, Text, View, Modal, Button, } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import RenderCampsite from '../features/campsites/RenderCampsite';
 import { toggleFavorite } from '../features/favorites/favoritesSlice';
-import { COMMENTS } from '../shared/comments';
+
 import { Rating, Input } from 'react-native-elements';
 import { postComment } from '../features/comments/commentsSlice'; // Importing postComment action creator
 
 const CampsiteInfoScreen = ({ route }) => {
     const { campsite } = route.params;
     const dispatch = useDispatch();
+    const comments = useSelector((state) => state.comments);
+    const favorites = useSelector((state) => state.favorites);
     const [showModal, setShowModal] = useState(false);
     const [rating, setRating] = useState(5);
     const [author, setAuthor] = useState('');
@@ -37,12 +39,12 @@ const CampsiteInfoScreen = ({ route }) => {
             author,
             rating,
             text,
-            campsiteId: props.campsite.id
+            campsiteId: campsite.id
         };
-        dispatch(postComment(newComment)); // Dispatching postComment action creator instead of console.log
-        setShowModal(!showModal);
-        resetForm();
-    };
+         dispatch(postComment(newComment)); // Dispatching postComment action creator instead of console.log
+         setShowModal(!showModal);
+    //     resetForm();
+     };
 
     const resetForm = () => {
         setRating(5);
@@ -53,7 +55,7 @@ const CampsiteInfoScreen = ({ route }) => {
     return (
         <View>
             <FlatList
-                data={COMMENTS.filter(comment => comment.campsiteId === campsite.id)}
+                data={comments.commentsArray.filter(comment => comment.campsiteId === campsite.id)}
                 renderItem={renderCommentItem}
                 keyExtractor={item => item.id.toString()}
                 contentContainerStyle={{
@@ -64,6 +66,7 @@ const CampsiteInfoScreen = ({ route }) => {
                     <>
                         <RenderCampsite
                             campsite={campsite}
+                            isFavorite={favorites.includes(campsite.id)}
                             markFavorite={() => dispatch(toggleFavorite(campsite.id))}
                             onShowModal={() => setShowModal(!showModal)}
                         />
@@ -103,7 +106,11 @@ const CampsiteInfoScreen = ({ route }) => {
                         <Button
                             title='Submit'
                             color='#5637DD'
-                            onPress={handleSubmit}
+                            onPress={() =>{
+                                 handleSubmit();
+                                 resetForm();
+                            }
+                        }
                         />
                     </View>
                     <View style={{ margin: 10 }}>
