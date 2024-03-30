@@ -10,7 +10,7 @@ const favoritesSlice = createSlice({
                     (favorite) => favorite !== action.payload
                 );
             } else {
-                favorites.push(action.payload);
+                return [...favorites, action.payload]; // Return the updated array after pushing the new favorite
             }
         }
     }

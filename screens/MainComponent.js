@@ -38,6 +38,7 @@ const HomeNavigator = () => {
                 options={({ navigation }) => ({
                     title: 'Home',
                     headerLeft: () => (
+                 
                         <Icon
                             name='home'
                             type='font-awesome'
@@ -60,6 +61,7 @@ const AboutNavigator = () => {
                 component={AboutScreen}
                 options={({ navigation }) => ({
                     headerLeft: () => (
+                 
                         <Icon
                             name='info-circle'
                             type='font-awesome'
@@ -83,6 +85,7 @@ const ContactNavigator = () => {
                 options={({ navigation }) => ({
                     title: 'Contact Us',
                     headerLeft: () => (
+                 
                         <Icon
                             name='address-card'
                             type='font-awesome'
@@ -132,6 +135,7 @@ const DirectoryNavigator = () => {
                 options={({ navigation }) => ({
                     title: 'Campsite Directory',
                     headerLeft: () => (
+                 
                         <Icon
                             name='list'
                             type='font-awesome'
