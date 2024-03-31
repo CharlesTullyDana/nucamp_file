@@ -10,10 +10,10 @@
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "1.21.0",
-    "@react-native-community/datetimepicker": "github:react-native-community/datetimepicker",
+    "@react-native-community/datetimepicker": "^0.7.4",
     "@react-native-community/masked-view": "^0.1.11",
     "@react-native-community/netinfo": "11.1.0",
-    "@react-native-picker/picker": "github:react-native-picker/picker",
+    "@react-native-picker/picker": "0.7.3",
     "@react-navigation/bottom-tabs": "^6.5.16",
     "@react-navigation/drawer": "^6.6.11",
     "@react-navigation/native": "^6.1.14",
