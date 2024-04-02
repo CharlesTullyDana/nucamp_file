@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import React, { useRef } from 'react';
 import { StyleSheet, Text, View, PanResponder, Alert } from 'react-native';
 import { Card, Icon } from 'react-native-elements';
 import { baseUrl } from '../../shared/baseUrl';
@@ -10,6 +10,8 @@ const RenderCampsite = (props) => {
     const view = useRef();
 
     const isLeftSwipe = ({ dx }) => dx < -200;
+
+    const isRightSwipe = ({ dx }) => dx > 200; // New function to detect right swipe
 
     const panResponder = PanResponder.create({
         onStartShouldSetPanResponder: () => true,
@@ -44,6 +46,8 @@ const RenderCampsite = (props) => {
                     ],
                     { cancelable: false }
                 );
+            } else if (isRightSwipe(gestureState)) { // Check for right swipe
+                props.onShowModal(); // Call the event handler to show the comment form modal
             }
         }
     });
