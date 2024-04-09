@@ -111,7 +111,6 @@ const RegisterTab = () => {
     const [email, setEmail] = useState('');
     const [remember, setRemember] = useState(false);
     const [imageUrl, setImageUrl] = useState(baseUrl + 'images/logo.png');
-
     const handleRegister = () => {
         const userInfo = {
             username,
@@ -136,23 +135,22 @@ const RegisterTab = () => {
             );
         }
     };
-
     const getImageFromCamera = async () => {
         const cameraPermission =
             await ImagePicker.requestCameraPermissionsAsync();
 
         if (cameraPermission.status === 'granted') {
             const capturedImage = await ImagePicker.launchCameraAsync({
-                allowsEditing: true,
-                aspect: [1, 1]
+                allowEditing: true,
+                aspect: [1,1]
             });
             if (capturedImage.assets) {
                 console.log(capturedImage.assets[0]);
                 setImageUrl(capturedImage.assets[0].uri);
             }
-        }
-    };
 
+        }
+    }
     return (
         <ScrollView>
             <View style={styles.container}>
@@ -161,8 +159,10 @@ const RegisterTab = () => {
                         source={{ uri: imageUrl }}
                         loadingIndicatorSource={logo}
                         style={styles.image}
+
                     />
-                    <Button title='Camera' onPress={getImageFromCamera} />
+                    <Button title='Camera' onPress={getImageFromCamera}  />
+
                 </View>
                 <Input
                     placeholder='Username'
@@ -300,12 +300,12 @@ const styles = StyleSheet.create({
         marginRight: 40,
         marginLeft: 40
     },
-    imageContainer: {
+    imageCotainer: {
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-evenly',
-        margin: 10
+        margin: 10 
     },
     image: {
         width: 60,
