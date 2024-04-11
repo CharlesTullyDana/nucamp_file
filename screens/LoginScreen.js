@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, ScrollView, Image } from 'react-native';
 import { CheckBox, Input, Button, Icon } from 'react-native-elements';
 import * as SecureStore from 'expo-secure-store';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import * as ImagePicker from 'expo-image-picker';
-import { baseUrl } from '../shared/baseUrl';
 import logo from '../assets/images/logo.png';
+import * as ImageManipulator from 'expo-image-manipulator';
 
 const LoginTab = ({ navigation }) => {
     const [username, setUsername] = useState('');
@@ -110,7 +110,8 @@ const RegisterTab = () => {
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [remember, setRemember] = useState(false);
-    const [imageUrl, setImageUrl] = useState(baseUrl + 'images/logo.png');
+    const [imageUrl, setImageUrl] = useState(null);
+
     const handleRegister = () => {
         const userInfo = {
             username,
@@ -135,6 +136,7 @@ const RegisterTab = () => {
             );
         }
     };
+
     const getImageFromCamera = async () => {
         const cameraPermission =
             await ImagePicker.requestCameraPermissionsAsync();
@@ -142,15 +144,49 @@ const RegisterTab = () => {
         if (cameraPermission.status === 'granted') {
             const capturedImage = await ImagePicker.launchCameraAsync({
                 allowEditing: true,
-                aspect: [1,1]
+                aspect: [1, 1]
             });
             if (capturedImage.assets) {
                 console.log(capturedImage.assets[0]);
-                setImageUrl(capturedImage.assets[0].uri);
+                processImage(capturedImage.assets[0].uri);
             }
 
         }
-    }
+    };
+    const getImageFromGallery = async () => {
+        const mediaLibraryPermissions =
+            await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+        if (mediaLibraryPermissions.status === 'granted') {
+            const capturedImage = await ImagePicker.launchImageLibraryAsync({
+                allowEditing: true,
+                aspect: [1, 1]
+            });
+            if (capturedImage.assets) {
+                console.log(capturedImage.assets[0]);
+                processImage(capturedImage.assets[0].uri);
+            }
+
+        }
+    };
+
+
+    const processImage = async (imgUri) => {
+        try {
+            const processedImage = await ImageManipulator.manipulateAsync(
+                imgUri,
+                [{ resize: { width: 400 } }],
+                { format: 'png' }
+            );
+            setImageUrl(processedImage.uri);
+            console.log(processedImage);
+            return processedImage;
+        } catch (error) {
+            console.error('Error processing image:', error);
+            throw error;
+        }
+    };
+
     return (
         <ScrollView>
             <View style={styles.container}>
@@ -159,10 +195,9 @@ const RegisterTab = () => {
                         source={{ uri: imageUrl }}
                         loadingIndicatorSource={logo}
                         style={styles.image}
-
                     />
-                    <Button title='Camera' onPress={getImageFromCamera}  />
-
+                   <Button title='Gallery' onPress={(getImageFromGallery)} />
+                    <Button title='Camera' onPress={getImageFromCamera} />
                 </View>
                 <Input
                     placeholder='Username'
@@ -300,12 +335,12 @@ const styles = StyleSheet.create({
         marginRight: 40,
         marginLeft: 40
     },
-    imageCotainer: {
+    imageContainer: {
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-evenly',
-        margin: 10 
+        margin: 10
     },
     image: {
         width: 60,
